@@ -27,13 +27,11 @@ public class Apple extends Entity {
     public Function<List<Entity>, Point> onCollide(Entity entity) {
         if(entity instanceof Body){
             Body body = (Body)entity;
-            if(body.isType(Body.BodyType.HEAD)) {
                 body.growTail();
 
                 return entities -> PointUtils.getRandomPositionExclude(10, 10, entities.stream()
                             .map(entity1 -> entity1.point)
                             .collect(Collectors.toList()));
-            }
 
         }
         return super.onCollide(entity);

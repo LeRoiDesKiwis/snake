@@ -82,20 +82,22 @@ public class Main implements ApplicationListener {
                 }).collect(Collectors.toList());
     }
 
-    public void runCollisions(){
+    private void runCollisions(){
 
-        getFullEntities().forEach(entity1 -> getFullEntities().forEach(entity2 -> {
+        List<Entity> fullEntities = getFullEntities();
 
-            if(!entity1.equals(entity2) && entity1.hasSameLocation(entity2)) {
+        for(Entity entity1 : fullEntities){
+            for(Entity entity2 : fullEntities){
 
-                Function<List<Entity>, Point> function = entity1.onCollide(entity2);
+                if(!entity1.equals(entity2) && !entity1.getClass().equals(entity2.getClass()) && entity1.hasSameLocation(entity2)){
+                    Function<List<Entity>, Point> function = entity1.onCollide(entity2);
 
-                entities.remove(entity1);
-                entities.add(entity1.update(function.apply(getFullEntities())));
+                    entities.remove(entity1);
+                    entities.add(entity1.update(function.apply(fullEntities)));
+                }
 
             }
-
-        }));
+        }
 
     }
 
