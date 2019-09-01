@@ -45,7 +45,12 @@ public class Main implements ApplicationListener {
     }
 
     public void checkInput(){
-        Optional<Body> bodyOptional = entities.stream().filter(entity -> entity.getClass() == Body.class).findAny().map(entity -> (Body)entity);
+        Optional<Body> bodyOptional = entities.stream()
+                .filter(entity -> entity instanceof Body)
+                .filter(entity -> ((Body) entity)
+                        .isType(Body.BodyType.HEAD))
+                .findAny()
+                .map(entity -> (Body)entity);
 
         if(!bodyOptional.isPresent()) return;
 
