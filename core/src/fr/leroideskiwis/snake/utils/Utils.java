@@ -14,4 +14,8 @@ public class Utils {
 
     }
 
+    public int compare(int i, int j){
+        return i-j;
+    }
+
 }

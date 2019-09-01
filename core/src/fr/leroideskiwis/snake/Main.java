@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import fr.leroideskiwis.snake.entities.Apple;
 import fr.leroideskiwis.snake.entities.Body;
 import fr.leroideskiwis.snake.entities.Entity;
+import fr.leroideskiwis.snake.utils.BackChecker;
 import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
@@ -53,10 +54,18 @@ public class Main implements ApplicationListener {
 
     public void checkInput(){
 
+        BackChecker checker = new BackChecker(direction);
+
+        Point direction = null;
+
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) direction = new Point(1, 0);
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) direction = new Point(-1, 0);
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) direction = new Point(0, 1);
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) direction = new Point(0, -1);
+
+        if(checker.check(direction)){
+            this.direction = direction;
+        }
     }
 
     private List<Entity> getEntitiesCopy(){
