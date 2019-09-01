@@ -28,15 +28,20 @@ public class Main implements ApplicationListener {
     private int width;
     private int height;
     private Point direction;
+    private MapSize mapSize;
 
     @Override
     public void create() {
+
+        this.mapSize = new MapSize(20, 20);
         this.shapeRenderer = new ShapeRenderer();
         this.entities = new ArrayList<>();
-        this.entities.add(new Body(Body.BodyType.HEAD, new Point(5, 5), null));
-        this.entities.add(new Apple(Color.GREEN, PointUtils.getRandomPosition(10, 10)));
-        Gdx.graphics.setContinuousRendering(true);
         this.direction = new Point(1, 0);
+
+        this.entities.add(new Body(mapSize, Body.BodyType.HEAD, new Point(mapSize.width/2, mapSize.width/2), null));
+        this.entities.add(new Apple(mapSize, Color.GREEN, PointUtils.getRandomPosition(mapSize.width, mapSize.height)));
+
+        Gdx.graphics.setContinuousRendering(true);
 
     }
 
@@ -118,8 +123,8 @@ public class Main implements ApplicationListener {
             runCollisions();
         }
         checkInput();
-        entities.forEach(entity -> entity.draw(shapeRenderer, new Rectangle(0, 0, width/10, height/10)));
-        
+        entities.forEach(entity -> entity.draw(shapeRenderer, new Rectangle(0, 0, width/mapSize.width, height/mapSize.height)));
+
         shapeRenderer.end();
 
     }

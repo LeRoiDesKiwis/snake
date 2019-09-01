@@ -3,6 +3,7 @@ package fr.leroideskiwis.snake.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import fr.leroideskiwis.snake.MapSize;
 import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
@@ -15,10 +16,12 @@ public abstract class Entity {
 
     protected Point point;
     protected Color color;
+    protected MapSize mapSize;
 
-    public Entity(Color color, Point point){
+    public Entity(MapSize size, Color color, Point point){
         this.point = point;
         this.color = color;
+        this.mapSize = size;
     }
 
     public abstract Entity update(Point newPosition);

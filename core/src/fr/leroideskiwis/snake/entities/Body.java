@@ -3,6 +3,7 @@ package fr.leroideskiwis.snake.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import fr.leroideskiwis.snake.MapSize;
 import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
@@ -15,15 +16,16 @@ public class Body extends Entity {
 
     private Body child;
     private BodyType type;
+    private boolean gameOver;
 
-    public Body(BodyType type, Color color, Point point, Body child) {
-        super(color, point);
+    public Body(MapSize size, BodyType type, Color color, Point point, Body child) {
+        super(size, color, point);
         this.child = child;
         this.type = type;
     }
 
-    public Body(BodyType type, Point point, Body child) {
-        this(type, type.color, point, child);
+    public Body(MapSize size, BodyType type, Point point, Body child) {
+        this(size, type, type.color, point, child);
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Body extends Entity {
             child = child.update(point);
         }
 
-        if(PointUtils.isInBorder(newPosition, 10, 10)) return new Body(type, newPosition, child);
+        if(PointUtils.isInBorder(newPosition, mapSize.width, mapSize.height)) return new Body(mapSize, type, newPosition, child);
         else return this;
     }
 
@@ -41,10 +43,10 @@ public class Body extends Entity {
     public Function<List<Entity>, Point> onCollide(Entity entity) {
         if(entity instanceof Body){
 
-
             if(child != null) {
                 child.kill();
-                return entities -> new Point(5, 5);
+                gameOver = true;
+                return entities -> new Point(mapSize.width/2, mapSize.height/2);
             }
 
         }
@@ -60,7 +62,7 @@ public class Body extends Entity {
     public void growTail(){
         if(child != null) child.growTail();
         else {
-            this.child = new Body(BodyType.TAIL, this.point, null);
+            this.child = new Body(mapSize, BodyType.TAIL, this.point, null);
         }
     }
 

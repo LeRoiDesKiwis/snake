@@ -1,6 +1,7 @@
 package fr.leroideskiwis.snake.entities;
 
 import com.badlogic.gdx.graphics.Color;
+import fr.leroideskiwis.snake.MapSize;
 import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
@@ -12,14 +13,14 @@ import java.util.stream.Stream;
 
 public class Apple extends Entity {
 
-    public Apple(Color color, Point point) {
-        super(color, point);
+    public Apple(MapSize size, Color color, Point point) {
+        super(size, color, point);
     }
 
     @Override
     public Apple update(Point newPosition) {
 
-        if(PointUtils.isInBorder(newPosition, 10, 10)) return new Apple(color, newPosition);
+        if(PointUtils.isInBorder(newPosition, mapSize.width, mapSize.height)) return new Apple(mapSize, color, newPosition);
         else return this;
     }
 
@@ -29,10 +30,9 @@ public class Apple extends Entity {
             Body body = (Body)entity;
                 body.growTail();
 
-                return entities -> PointUtils.getRandomPositionExclude(10, 10, entities.stream()
+                return entities -> PointUtils.getRandomPositionExclude(mapSize.width, mapSize.height, entities.stream()
                             .map(entity1 -> entity1.point)
                             .collect(Collectors.toList()));
-
         }
         return super.onCollide(entity);
     }
