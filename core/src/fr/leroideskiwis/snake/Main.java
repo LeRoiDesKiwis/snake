@@ -117,10 +117,9 @@ public class Main implements ApplicationListener {
             updateHead();
             runCollisions();
         }
+        checkInput();
         entities.forEach(entity -> entity.draw(shapeRenderer, new Rectangle(0, 0, width/10, height/10)));
-
-
-
+        
         shapeRenderer.end();
 
     }
