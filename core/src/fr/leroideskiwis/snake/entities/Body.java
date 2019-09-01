@@ -41,8 +41,11 @@ public class Body extends Entity {
     public Function<List<Entity>, Point> onCollide(Entity entity) {
         if(entity instanceof Body){
 
-            if(child != null) ((Body) entity).kill();
-            return entities -> point;
+
+            if(child != null) {
+                child.kill();
+                return entities -> new Point(5, 5);
+            }
 
         }
         return super.onCollide(entity);

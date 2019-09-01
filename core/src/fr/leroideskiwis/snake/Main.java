@@ -27,6 +27,7 @@ public class Main implements ApplicationListener {
     private float delta;
     private int width;
     private int height;
+    private Point direction;
 
     @Override
     public void create() {
@@ -35,6 +36,7 @@ public class Main implements ApplicationListener {
         this.entities.add(new Body(Body.BodyType.HEAD, new Point(5, 5), null));
         this.entities.add(new Apple(Color.GREEN, PointUtils.getRandomPosition(10, 10)));
         Gdx.graphics.setContinuousRendering(true);
+        this.direction = new Point(1, 0);
 
     }
 
@@ -45,27 +47,11 @@ public class Main implements ApplicationListener {
     }
 
     public void checkInput(){
-        Optional<Body> bodyOptional = entities.stream()
-                .filter(entity -> entity instanceof Body)
-                .filter(entity -> ((Body) entity)
-                        .isType(Body.BodyType.HEAD))
-                .findAny()
-                .map(entity -> (Body)entity);
 
-        if(!bodyOptional.isPresent()) return;
-
-        Body body = bodyOptional.get();
-        Body newBody = null;
-
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) newBody = (Body)body.move(new Point(1, 0));
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) newBody = (Body)body.move(new Point(-1, 0));
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) newBody = (Body)body.move(new Point(0, 1));
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) newBody = (Body)body.move(new Point(0, -1));
-
-        if(newBody != null){
-            entities.remove(body);
-            entities.add(newBody);
-        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) direction = new Point(1, 0);
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) direction = new Point(-1, 0);
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) direction = new Point(0, 1);
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) direction = new Point(0, -1);
     }
 
     private List<Entity> getEntitiesCopy(){
@@ -103,6 +89,19 @@ public class Main implements ApplicationListener {
 
     }
 
+    private void updateHead(){
+        Optional<Body> bodyOptional = entities.stream()
+                .filter(entity -> entity instanceof Body)
+                .filter(entity -> ((Body) entity)
+                        .isType(Body.BodyType.HEAD))
+                .findAny()
+                .map(entity -> (Body)entity);
+        bodyOptional.ifPresent(body -> {
+            entities.remove(body);
+            entities.add(body.move(direction));
+        });
+    }
+
     @Override
     public void render() {
 
@@ -112,12 +111,15 @@ public class Main implements ApplicationListener {
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         delta+= Gdx.graphics.getDeltaTime();
-        if(delta >= 0.1f){
+        if(delta >= 0.11f){
             delta = 0;
             checkInput();
+            updateHead();
             runCollisions();
         }
         entities.forEach(entity -> entity.draw(shapeRenderer, new Rectangle(0, 0, width/10, height/10)));
+
+
 
         shapeRenderer.end();
 
