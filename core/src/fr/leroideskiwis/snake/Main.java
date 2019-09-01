@@ -72,7 +72,7 @@ public class Main implements ApplicationListener {
         return new ArrayList<>(entities);
     }
 
-    public List<Entity> getFullEntities(){
+    private List<Entity> getFullEntities(){
         return getEntitiesCopy().stream()
                 .flatMap(entity1 -> {
                     if(entity1 instanceof Body && ((Body)entity1).isType(Body.BodyType.HEAD)){
@@ -89,11 +89,13 @@ public class Main implements ApplicationListener {
         for(Entity entity1 : fullEntities){
             for(Entity entity2 : fullEntities){
 
-                if(!entity1.equals(entity2) && !entity1.getClass().equals(entity2.getClass()) && entity1.hasSameLocation(entity2)){
+                if(entity1 != entity2 && entity1.hasSameLocation(entity2)) {
                     Function<List<Entity>, Point> function = entity1.onCollide(entity2);
 
-                    entities.remove(entity1);
-                    entities.add(entity1.update(function.apply(fullEntities)));
+                    if (entities.contains(entity1)) {
+                        entities.remove(entity1);
+                        entities.add(entity1.update(function.apply(fullEntities)));
+                    }
                 }
 
             }
