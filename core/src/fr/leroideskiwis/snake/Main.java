@@ -50,7 +50,7 @@ public class Main implements ApplicationListener {
         this.batch = new SpriteBatch();
         this.score = new Score();
 
-        this.entities.add(new Body(mapSize, Body.BodyType.HEAD, new Point(mapSize.width/2, mapSize.width/2), null));
+        this.entities.add(new Body(score, mapSize, Body.BodyType.HEAD, new Point(mapSize.width/2, mapSize.width/2), null));
         this.entities.add(new Apple(score, mapSize, Color.GREEN, PointUtils.getRandomPosition(mapSize.width, mapSize.height)));
 
         Gdx.graphics.setContinuousRendering(true);
@@ -67,13 +67,15 @@ public class Main implements ApplicationListener {
 
         BackChecker checker = new BackChecker(direction);
 
+        if(!EntityUtils.getEntity(entities, entity -> entity instanceof Body && ((Body)entity).isType(Body.BodyType.HEAD)).get().isInBorder()) return;
+
         Point direction = null;
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) direction = new Point(1, 0);
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) direction = new Point(-1, 0);
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) direction = new Point(0, 1);
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) direction = new Point(0, -1);
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause = !pause;
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) pause = !pause;
 
         if(checker.check(direction)){
             this.direction = direction;
@@ -118,18 +120,19 @@ public class Main implements ApplicationListener {
 
         final int TEXT_SIZE = 10;
 
-        font.draw(batch, text, height-TEXT_SIZE-10, width-TEXT_SIZE-10);
+        Gdx.graphics.setTitle("snake ("+text+")");
 
     }
 
     @Override
     public void render() {
-        batch.begin();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         Gdx.gl.glClearColor( 0, 0, 0, 0 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
+
+        batch.begin();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         delta+= Gdx.graphics.getDeltaTime();
         if(delta >= 0.1f && !pause){
@@ -138,7 +141,7 @@ public class Main implements ApplicationListener {
             runCollisions();
         }
         if(pause) text = "en pause";
-        else text = score.toString();
+        else text = "score : "+score.toString();
         checkInput();
         entities.forEach(entity -> entity.draw(shapeRenderer, new Rectangle(0, 0, width/mapSize.width, height/mapSize.height)));
         renderText();

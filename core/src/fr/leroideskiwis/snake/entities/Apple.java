@@ -14,11 +14,8 @@ import java.util.stream.Stream;
 
 public class Apple extends Entity {
 
-    private Score score;
-
     public Apple(Score score, MapSize size, Color color, Point point) {
-        super(size, color, point);
-        this.score = score;
+        super(score, size, color, point);
     }
 
     @Override

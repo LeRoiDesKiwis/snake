@@ -5,16 +5,20 @@ import fr.leroideskiwis.snake.entities.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EntityUtils {
 
-    public static Entity getEntity(List<Entity> entities, Predicate<Entity> predicate){
+    public static Optional<Body> getHead(List<Entity> entities){
+        return getEntity(entities, entity -> entity instanceof Body && ((Body)entity).isType(Body.BodyType.HEAD))
+                .map(entity -> (Body)entity);
+    }
 
-        return entities.stream().filter(predicate).findAny().orElse(null);
-
+    public static Optional<Entity> getEntity(List<Entity> entities, Predicate<Entity> predicate){
+        return entities.stream().filter(predicate).findAny();
     }
 
     private static List<Entity> getEntitiesCopy(List<Entity> entities){

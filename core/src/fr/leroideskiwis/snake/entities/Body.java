@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import fr.leroideskiwis.snake.MapSize;
+import fr.leroideskiwis.snake.Score;
 import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
@@ -17,14 +18,10 @@ public class Body extends Entity {
     private Body child;
     private BodyType type;
 
-    public Body(MapSize size, BodyType type, Color color, Point point, Body child) {
-        super(size, color, point);
+    public Body(Score score, MapSize size, BodyType type, Point point, Body child) {
+        super(score, size, type.color, point);
         this.child = child;
         this.type = type;
-    }
-
-    public Body(MapSize size, BodyType type, Point point, Body child) {
-        this(size, type, type.color, point, child);
     }
 
     @Override
@@ -34,7 +31,7 @@ public class Body extends Entity {
             child = child.update(point);
         }
 
-        return new Body(mapSize, type, PointUtils.traverseWall(newPosition, mapSize), child);
+        return new Body(score, mapSize, type, PointUtils.traverseWall(newPosition, mapSize), child);
     }
 
     @Override
@@ -43,6 +40,7 @@ public class Body extends Entity {
 
             if(child != null) {
                 kill();
+                score.reset();
                 return entities -> new Point(mapSize.width/2, mapSize.height/2);
             }
 
@@ -59,7 +57,7 @@ public class Body extends Entity {
     public void growTail(){
         if(child != null) child.growTail();
         else {
-            this.child = new Body(mapSize, BodyType.TAIL, this.point, null);
+            this.child = new Body(score, mapSize, BodyType.TAIL, this.point, null);
         }
     }
 
