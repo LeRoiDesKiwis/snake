@@ -16,7 +16,6 @@ public class Body extends Entity {
 
     private Body child;
     private BodyType type;
-    private boolean gameOver;
 
     public Body(MapSize size, BodyType type, Color color, Point point, Body child) {
         super(size, color, point);
@@ -35,8 +34,7 @@ public class Body extends Entity {
             child = child.update(point);
         }
 
-        if(PointUtils.isInBorder(newPosition, mapSize.width, mapSize.height)) return new Body(mapSize, type, newPosition, child);
-        else return this;
+        return new Body(mapSize, type, PointUtils.traverseWall(newPosition, mapSize), child);
     }
 
     @Override
@@ -44,8 +42,7 @@ public class Body extends Entity {
         if(entity instanceof Body){
 
             if(child != null) {
-                child.kill();
-                gameOver = true;
+                kill();
                 return entities -> new Point(mapSize.width/2, mapSize.height/2);
             }
 
@@ -90,5 +87,11 @@ public class Body extends Entity {
         bodies.add(this);
         if(child != null) return child.toList(bodies);
         else return bodies;
+    }
+
+    public int getTailQueue(int i){
+        i++;
+        if(child != null) return child.getTailQueue(i);
+        return i;
     }
 }

@@ -2,6 +2,7 @@ package fr.leroideskiwis.snake.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import fr.leroideskiwis.snake.MapSize;
+import fr.leroideskiwis.snake.Score;
 import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
@@ -13,14 +14,17 @@ import java.util.stream.Stream;
 
 public class Apple extends Entity {
 
-    public Apple(MapSize size, Color color, Point point) {
+    private Score score;
+
+    public Apple(Score score, MapSize size, Color color, Point point) {
         super(size, color, point);
+        this.score = score;
     }
 
     @Override
     public Apple update(Point newPosition) {
 
-        if(PointUtils.isInBorder(newPosition, mapSize.width, mapSize.height)) return new Apple(mapSize, color, newPosition);
+        if(PointUtils.isInBorder(newPosition, mapSize.width, mapSize.height)) return new Apple(score, mapSize, color, newPosition);
         else return this;
     }
 
@@ -29,7 +33,7 @@ public class Apple extends Entity {
         if(entity instanceof Body){
             Body body = (Body)entity;
                 body.growTail();
-
+                score.increment();
                 return entities -> PointUtils.getRandomPositionExclude(mapSize.width, mapSize.height, entities.stream()
                             .map(entity1 -> entity1.point)
                             .collect(Collectors.toList()));
