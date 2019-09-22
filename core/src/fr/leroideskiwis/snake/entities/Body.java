@@ -54,9 +54,9 @@ public class Body extends Entity {
     public void growTail() {
         if (child != null) {
             child.growTail();
-        } else {
-            this.child = new Body(score, mapSize, BodyType.TAIL, this.point, null);
+            return;
         }
+        this.child = new Body(score, mapSize, BodyType.TAIL, this.point, null);
     }
 
     public boolean isType(BodyType bodyType) {
@@ -74,7 +74,7 @@ public class Body extends Entity {
         HEAD(Color.RED),
         TAIL(Color.ORANGE);
 
-        Color color;
+        private final Color color;
 
         BodyType(Color color) {
             this.color = color;
