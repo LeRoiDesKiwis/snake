@@ -7,10 +7,8 @@ import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Apple extends Entity {
     public Apple(Score score, MapSize size, Color color, Point point) {
