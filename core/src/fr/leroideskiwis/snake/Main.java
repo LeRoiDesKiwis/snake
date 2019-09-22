@@ -67,20 +67,16 @@ public class Main implements ApplicationListener {
 
         Point direction = null;
 
-        // TODO Replace that by a switch
+        // TODO Use a map instead?
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             direction = new Point(1, 0);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             direction = new Point(-1, 0);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             direction = new Point(0, 1);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             direction = new Point(0, -1);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             pause = !pause;
         }
 
@@ -121,8 +117,7 @@ public class Main implements ApplicationListener {
     }
 
     public void renderText() {
-        final int TEXT_SIZE = 10;
-
+        // final int TEXT_SIZE = 10;
         Gdx.graphics.setTitle("snake (" + text + ")");
     }
 
@@ -141,11 +136,13 @@ public class Main implements ApplicationListener {
             updateHead();
             runCollisions();
         }
+
         if (pause) {
             text = "en pause";
         } else {
-            text = "score : " + score.toString();
+            text = "score : " + score;
         }
+
         checkInput();
         entities.forEach(entity -> entity.draw(shapeRenderer, new Rectangle(0, 0, width / mapSize.width, height / mapSize.height)));
         renderText();
