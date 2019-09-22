@@ -1,7 +1,6 @@
 package fr.leroideskiwis.snake;
 
 public class MapSize {
-
     public final int height;
     public final int width;
 
@@ -9,5 +8,4 @@ public class MapSize {
         this.height = height;
         this.width = width;
     }
-
 }
