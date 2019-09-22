@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.function.Function;
 
 public abstract class Entity {
-    protected Point point;
-    protected Color color;
-    protected MapSize mapSize;
-    protected Score score;
+    private Point point;
+    private Color color;
+    private MapSize mapSize;
+    private Score score;
 
     public Entity(Score score, MapSize size, Color color, Point point) {
         this.point = point;
