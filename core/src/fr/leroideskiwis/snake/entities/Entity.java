@@ -9,18 +9,15 @@ import fr.leroideskiwis.snake.utils.PointUtils;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class Entity {
+    private Point point;
+    private Color color;
+    private MapSize mapSize;
+    private Score score;
 
-    protected Point point;
-    protected Color color;
-    protected MapSize mapSize;
-    protected Score score;
-
-    public Entity(Score score, MapSize size, Color color, Point point){
+    public Entity(Score score, MapSize size, Color color, Point point) {
         this.point = point;
         this.color = color;
         this.mapSize = size;
@@ -29,34 +26,32 @@ public abstract class Entity {
 
     public abstract Entity update(Point newPosition);
 
-    public boolean isLocation(Point point){
+    public boolean isLocation(Point point) {
         return this.point.equals(point);
     }
 
-    public void draw(ShapeRenderer renderer, Rectangle rectangle){
-
+    public void draw(ShapeRenderer renderer, Rectangle rectangle) {
         renderer.setColor(color);
-        renderer.rect(point.x*rectangle.width, point.y*rectangle.height , rectangle.width, rectangle.height);
-
+        renderer.rect(point.x * rectangle.width, point.y * rectangle.height, rectangle.width, rectangle.height);
     }
 
-    public Entity move(Point move){
+    public Entity move(Point move) {
         return update(PointUtils.copyAndMove(point, move.x, move.y));
     }
 
-    public Function<List<Entity>, Point> onCollide(Entity entity){
+    public Function<List<Entity>, Point> onCollide(Entity entity) {
         return entity1 -> point;
     }
 
-    public boolean hasSameLocation(Entity entity){
+    public boolean hasSameLocation(Entity entity) {
         return entity.point.equals(point);
     }
 
-    public boolean canSpawn(List<Entity> entities, Point point){
+    public boolean canSpawn(List<Entity> entities, Point point) {
         return true;
     }
 
-    public boolean isInBorder(){
+    public boolean isInBorder() {
         return PointUtils.isInBorder(point, mapSize.width, mapSize.height);
     }
 }

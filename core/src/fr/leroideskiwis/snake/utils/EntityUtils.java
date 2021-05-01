@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EntityUtils {
-
     public static Optional<Body> getHead(List<Entity> entities){
         return getEntity(entities, entity -> entity instanceof Body && ((Body)entity).isType(Body.BodyType.HEAD))
                 .map(entity -> (Body)entity);
